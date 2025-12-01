@@ -19,7 +19,7 @@ void fcfs(int pid[], int at[], int bt[], int n) {
 
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
-            if (at[j] > at[j + 1]) {
+            if (at[j] > at[j + 1] || (at[j] == at[j + 1] && pid[j] > pid[j + 1])) {
 
                 int temp = at[j];
                 at[j] = at[j + 1];
@@ -42,10 +42,12 @@ void fcfs(int pid[], int at[], int bt[], int n) {
     int gcount = 0;
     int total_tat = 0;
     int total_wt = 0;
+    int total_idle = 0;
 
     for (int i = 0; i < n; i++) {
 
         if (time < at[i]) {
+            total_idle += (at[i] - time);
             gantt_pid[gcount] = 0;
             time = at[i];
             gantt_end[gcount] = time;
@@ -101,9 +103,15 @@ void fcfs(int pid[], int at[], int bt[], int n) {
 
     double avg_tat = (double)total_tat / n;
     double avg_wt = (double)total_wt / n;
+    int makespan = ct[n - 1] - at[0];
+    double throughput = 0.0;
+    if (makespan > 0) throughput = (double)n / (double)makespan;
 
     cout.setf(ios::fixed);
     cout.precision(2);
     cout << "\nAverage Turnaround Time: " << avg_tat << "\n";
     cout << "Average Waiting Time: " << avg_wt << "\n";
+    cout << "Total CPU Idle Time: " << total_idle << "\n";
+    cout << "Makespan: " << makespan << "\n";
+    cout << "Throughput (processes/unit time): " << throughput << "\n";
 }
