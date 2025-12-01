@@ -26,17 +26,27 @@ void fcfs(int pid[], int at[], int bt[], int n) {
     }
 
     int time = 0;
+    int gantt_pid[40];
+    int gantt_end[40];
+    int gcount = 0;
 
     for (int i = 0; i < n; i++) {
 
         if (time < at[i]) {
+            gantt_pid[gcount] = 0;
             time = at[i];
+            gantt_end[gcount] = time;
+            gcount++;
         }
 
         time += bt[i];
         ct[i] = time;
         tat[i] = ct[i] - at[i];
         wt[i] = tat[i] - bt[i];
+
+        gantt_pid[gcount] = pid[i];
+        gantt_end[gcount] = time;
+        gcount++;
     }
 
     cout << "\nPID\tAT\tBT\tCT\tTAT\tWT\n";
@@ -51,19 +61,25 @@ void fcfs(int pid[], int at[], int bt[], int n) {
 
     cout << "\nGantt Chart:\n";
     cout << " ";
-    for (int i = 0; i < n; i++) cout << "----";
+    for (int i = 0; i < gcount; i++) cout << "----";
     cout << "\n|";
-
-    for (int i = 0; i < n; i++) {
-        cout << " P" << pid[i] << " |";
+    for (int i = 0; i < gcount; i++) {
+        if (gantt_pid[i] == 0) cout << " idle |";
+        else {
+            cout << " P" << gantt_pid[i] << " ";
+            if (gantt_pid[i] < 10) cout << " |";
+            else cout << "|";
+        }
     }
-
     cout << "\n ";
-    for (int i = 0; i < n; i++) cout << "----";
+    for (int i = 0; i < gcount; i++) cout << "----";
 
     cout << "\n0";
-    for (int i = 0; i < n; i++) {
-        cout << "   " << ct[i];
+    for (int i = 0; i < gcount; i++) {
+        int t = gantt_end[i];
+        if (t < 10) cout << "   " << t;
+        else if (t < 100) cout << "  " << t;
+        else cout << " " << t;
     }
     cout << "\n";
 }
