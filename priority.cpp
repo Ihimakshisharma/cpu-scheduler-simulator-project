@@ -24,6 +24,8 @@ void priorityScheduling(int pid[], int at[], int bt[], int pr[], int n) {
     int gantt_pid[40];
     int gantt_end[40];
     int gcount = 0;
+    int total_tat = 0;
+    int total_wt = 0;
 
     while (completed < n) {
 
@@ -36,7 +38,8 @@ void priorityScheduling(int pid[], int at[], int bt[], int pr[], int n) {
                     bestP = pr[i];
                     idx = i;
                 } else if (pr[i] == bestP) {
-                    if (pid[i] < pid[idx]) idx = i;
+                    if (at[i] < at[idx]) idx = i;
+                    else if (at[i] == at[idx] && pid[i] < pid[idx]) idx = i;
                 }
             }
         }
@@ -57,6 +60,9 @@ void priorityScheduling(int pid[], int at[], int bt[], int pr[], int n) {
         ct[idx] = time;
         tat[idx] = ct[idx] - at[idx];
         wt[idx] = tat[idx] - bt[idx];
+
+        total_tat += tat[idx];
+        total_wt += wt[idx];
 
         done[idx] = true;
         completed++;
@@ -100,4 +106,18 @@ void priorityScheduling(int pid[], int at[], int bt[], int pr[], int n) {
         else cout << " " << t;
     }
     cout << "\n";
+
+    double avg_tat = (double)total_tat / n;
+    double avg_wt = (double)total_wt / n;
+    int makespan = ct[n - 1] - at[0];
+    double throughput = 0.0;
+    if (makespan > 0) throughput = (double)n / (double)makespan;
+
+    cout.setf(ios::fixed);
+    cout.precision(2);
+    cout << "\nAverage Turnaround Time: " << avg_tat << "\n";
+    cout << "Average Waiting Time: " << avg_wt << "\n";
+    cout << "Makespan: " << makespan << "\n";
+    cout << "Throughput: " << throughput << "\n";
 }
+
