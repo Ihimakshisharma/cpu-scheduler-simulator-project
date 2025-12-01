@@ -1,10 +1,9 @@
 #include <iostream>
-using namespace std;
-
 #include "fcfs.h"
 #include "priority.h"
 #include "sjf.h"
 #include "rr.h"
+using namespace std;
 
 int main() {
 
@@ -13,16 +12,14 @@ int main() {
     cin >> n;
 
     int pid[20], at[20], bt[20], pr[20];
-    int quantum;
-
+    
     for (int i = 0; i < n; i++) {
         pid[i] = i + 1;
-        cout << "\nProcess " << pid[i] << ":\n";
-        cout << "Arrival Time: ";
+        cout << "Enter Arrival Time for P" << i+1 << ": ";
         cin >> at[i];
-        cout << "Burst Time: ";
+        cout << "Enter Burst Time for P" << i+1 << ": ";
         cin >> bt[i];
-        cout << "Priority (lower = higher): ";
+        cout << "Enter Priority for P" << i+1 << ": ";
         cin >> pr[i];
     }
 
@@ -31,33 +28,28 @@ int main() {
     cout << "2. SJF (Non-Preemptive)\n";
     cout << "3. Priority Scheduling\n";
     cout << "4. Round Robin\n";
-    cout << "Enter choice: ";
+    int choice;
+    cin >> choice;
 
-    int ch;
-    cin >> ch;
-
-    switch (ch) {
-        case 1:
-            fcfs(pid, at, bt, n);
-            break;
-
-        case 2:
-            sjf(pid, at, bt, n);
-            break;
-
-        case 3:
-            priorityScheduling(pid, at, bt, pr, n);
-            break;
-
-        case 4:
-            cout << "Enter Time Quantum: ";
-            cin >> quantum;
-            roundRobin(pid, at, bt, n, quantum);
-            break;
-
-        default:
-            cout << "Invalid choice.";
+    if (choice == 1) {
+        fcfs(pid, at, bt, n);
+    }
+    else if (choice == 2) {
+        sjf(pid, at, bt, n);
+    }
+    else if (choice == 3) {
+        priorityScheduling(pid, at, bt, pr, n);
+    }
+    else if (choice == 4) {
+        int q;
+        cout << "Enter Time Quantum: ";
+        cin >> q;
+        roundRobin(pid, at, bt, n, q);
+    }
+    else {
+        cout << "Invalid option selected.";
     }
 
     return 0;
 }
+
