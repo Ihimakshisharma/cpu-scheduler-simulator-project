@@ -4,10 +4,7 @@ using namespace std;
 
 void sjf(int pid[], int at[], int bt[], int n) {
 
-    if (n <= 0) {
-        cout << "No processes.\n";
-        return;
-    }
+    if (n <= 0) return;
     if (n > 20) n = 20;
 
     int ct[20], tat[20], wt[20];
@@ -21,7 +18,11 @@ void sjf(int pid[], int at[], int bt[], int n) {
     int gantt_end[40];
     int gcount = 0;
 
+    int total_tat = 0;
+    int total_wt = 0;
+
     while (completed < n) {
+
         int idx = -1;
         int bestBT = 1000000;
 
@@ -54,6 +55,9 @@ void sjf(int pid[], int at[], int bt[], int n) {
         tat[idx] = ct[idx] - at[idx];
         wt[idx] = tat[idx] - bt[idx];
 
+        total_tat += tat[idx];
+        total_wt += wt[idx];
+
         gantt_pid[gcount] = pid[idx];
         gantt_end[gcount] = time;
         gcount++;
@@ -64,11 +68,11 @@ void sjf(int pid[], int at[], int bt[], int n) {
 
     cout << "\nPID\tAT\tBT\tCT\tTAT\tWT\n";
     for (int i = 0; i < n; i++) {
-        cout << pid[i] << "\t" 
-             << at[i] << "\t" 
-             << bt[i] << "\t" 
-             << ct[i] << "\t" 
-             << tat[i] << "\t" 
+        cout << pid[i] << "\t"
+             << at[i] << "\t"
+             << bt[i] << "\t"
+             << ct[i] << "\t"
+             << tat[i] << "\t"
              << wt[i] << "\t\n";
     }
 
@@ -85,8 +89,8 @@ void sjf(int pid[], int at[], int bt[], int n) {
     }
     cout << "\n ";
     for (int i = 0; i < gcount; i++) cout << "----";
-
     cout << "\n0";
+
     for (int i = 0; i < gcount; i++) {
         int t = gantt_end[i];
         if (t < 10) cout << "   " << t;
@@ -94,4 +98,16 @@ void sjf(int pid[], int at[], int bt[], int n) {
         else cout << " " << t;
     }
     cout << "\n";
+
+    double avg_tat = (double)total_tat / n;
+    double avg_wt = (double)total_wt / n;
+    int makespan = ct[n - 1] - at[0];
+    double throughput = (makespan > 0) ? (double)n / makespan : 0;
+
+    cout.setf(ios::fixed);
+    cout.precision(2);
+    cout << "\nAverage Turnaround Time: " << avg_tat << "\n";
+    cout << "Average Waiting Time: " << avg_wt << "\n";
+    cout << "Makespan: " << makespan << "\n";
+    cout << "Throughput: " << throughput << "\n";
 }
