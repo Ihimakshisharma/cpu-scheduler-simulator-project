@@ -2,6 +2,10 @@
 #include "priority.h"
 using namespace std;
 
+#ifndef PRIO_DEBUG
+#define PRIO_DEBUG 0
+#endif
+
 void priorityScheduling(int pid[], int at[], int bt[], int pr[], int n) {
 
     if (n <= 0) {
@@ -13,6 +17,7 @@ void priorityScheduling(int pid[], int at[], int bt[], int pr[], int n) {
     for (int i = 0; i < n; i++) {
         if (at[i] < 0) at[i] = 0;
         if (bt[i] < 0) bt[i] = 0;
+        if (pr[i] < 0) pr[i] = 0;
     }
 
     int ct[20], tat[20], wt[20];
@@ -107,6 +112,10 @@ void priorityScheduling(int pid[], int at[], int bt[], int pr[], int n) {
     }
     cout << "\n";
 
+#if PRIO_DEBUG
+    cout << "[DEBUG] total_tat=" << total_tat << " total_wt=" << total_wt << "\n";
+#endif
+
     double avg_tat = (double)total_tat / n;
     double avg_wt = (double)total_wt / n;
     int makespan = ct[n - 1] - at[0];
@@ -120,4 +129,5 @@ void priorityScheduling(int pid[], int at[], int bt[], int pr[], int n) {
     cout << "Makespan: " << makespan << "\n";
     cout << "Throughput: " << throughput << "\n";
 }
+
 
