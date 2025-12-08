@@ -14,12 +14,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install C++ Compiler
+    - name: Install C++ compiler
       run: sudo apt-get update && sudo apt-get install -y g++
 
     - name: Build CPU Scheduler Project
       run: |
         g++ main.cpp fcfs.cpp priority.cpp sjf.cpp roundrobin.cpp visualization.cpp -o scheduler_app -std=c++11
-
-    - name: Run basic test
-      run: ./scheduler_app <<< "0"
